@@ -27,7 +27,7 @@ function App() {
     if(!isLoading){
       if(value){
         setIsLoading(true)
-        const response = await fetch('http://localhost:3030/api/v1/handbook',{
+        const response = await fetch('/api/v1/handbook',{
           method:'POST',
           headers:{
             'content-type': 'application/json'
