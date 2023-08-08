@@ -6,7 +6,8 @@
   "scripts": {
     "watch": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "develop": "concurrently \" npm run watch\" \"cd client && npm start\""
+    "develop": "concurrently \" npm run watch\" \"cd client && npm start\"",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
