@@ -30,7 +30,7 @@ const { HNSWLib } = require('langchain/vectorstores');
 const { OpenAIEmbeddings } = require('langchain/embeddings');
 const { RecursiveCharacterTextSplitter } = require('langchain/text_splitter');
 const  fs = require('fs');
-const  dotenv = require('dotenv');
+// const  dotenv = require('dotenv');
 
 
 // dotenv.config();
