@@ -100,7 +100,7 @@ app.post('/api/v1/handbook',async(req,res)=>{
     }
 })
 
-app.listen(port)
+app.listen(process.env.PORT||3030)
 
 
 
