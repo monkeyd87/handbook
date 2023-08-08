@@ -33,7 +33,7 @@ const  fs = require('fs');
 const  dotenv = require('dotenv');
 
 
-dotenv.config();
+// dotenv.config();
 
 
 // 3. Set up input data and paths
