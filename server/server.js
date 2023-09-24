@@ -24,16 +24,16 @@ app.use(express.json())
 // import * as dotenv from 'dotenv';
 
 // 2. Load environment variables
-const { OpenAI } = require('langchain/llms');
+const { OpenAI } = require('langchain/llms/openai');
 const { RetrievalQAChain } = require('langchain/chains');
-const { HNSWLib } = require('langchain/vectorstores');
-const { OpenAIEmbeddings } = require('langchain/embeddings');
+const { HNSWLib,PineconeStore } = require('langchain/vectorstores');
+const { OpenAIEmbeddings } = require('langchain/embeddings/openai');
 const { RecursiveCharacterTextSplitter } = require('langchain/text_splitter');
 const  fs = require('fs');
-// const  dotenv = require('dotenv');
+const  dotenv = require('dotenv')
 
 
-// dotenv.config();
+dotenv.config();
 
 
 // 3. Set up input data and paths
@@ -45,8 +45,10 @@ const VECTOR_STORE_PATH = `${txtFilename}.index`;
 // 4. Define the main function runWithEmbeddings
  const runWithEmbeddings = async (question) => {
   // 5. Initialize the OpenAI model with an empty configuration object
+  console.log(process.env.OPENAI_API_KEY)
   const model = new OpenAI({
-    openAIApiKey: process.env.OPENAI_API_KEY
+  openAIApiKey: process.env.OPENAI_API_KEY
+
   });
 
   // 6. Check if the vector store file exists
@@ -54,6 +56,7 @@ const VECTOR_STORE_PATH = `${txtFilename}.index`;
   if (fs.existsSync(VECTOR_STORE_PATH)) {
     // 6.1. If the vector store file exists, load it into memory
     console.log('Vector Exists..');
+    console.table(HNSWLib)
     vectorStore = await HNSWLib.load(VECTOR_STORE_PATH, new OpenAIEmbeddings());
   } else {
     // 6.2. If the vector store file doesn't exist, create it
@@ -91,13 +94,18 @@ const VECTOR_STORE_PATH = `${txtFilename}.index`;
 app.use(express.static('public'))
 
 app.post('/api/v1/handbook',async(req,res)=>{
+      try{
+        const {question} =req.body
+        const answer = await runWithEmbeddings(question)
+    
+        if(question){
+            res.json({data:answer.text})
+        }
 
-    const {question} =req.body
-    const answer = await runWithEmbeddings(question)
-
-    if(question){
-        res.json({data:answer.text})
-    }
+      }catch(err){
+        res.send(err)
+        console.log(err)
+      }
 })
 
 app.listen(process.env.PORT||3030)
